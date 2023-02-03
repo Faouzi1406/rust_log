@@ -1,2 +1,2 @@
-mod logger;
+pub mod logger;
 mod testing;

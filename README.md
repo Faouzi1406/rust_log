@@ -7,7 +7,7 @@ This crate provides a simple logging solution for your Rust projects. It allows 
 First, include the following in your `Cargo.toml` file:
 
 ```Rust
-logger = { git = "github.com/Faouzi1406/https://github.com/Faouzi1406/rust_log " }
+logger = { git = "https://github.com/Faouzi1406/rust_log" }
 ```
 
 Then, in your Rust file, use the following to import the crate:
