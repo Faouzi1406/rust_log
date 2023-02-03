@@ -15,7 +15,7 @@ pub fn log(log: Log, file: PathBuf, error_trace:Option<&'static str>) {
             Log::Error(err) => format!("{} |  [ERROR] | {} \n", time, err),
             Log::Print(value) => format!("{} |  [PRINT] | {} \n", time, value),
             Log::Warning(value) => format!("{} |  [WARNING] | {} \n", time, value),
-            Log::Info(value) => format!("{} | [INFO] | {}", time, value)
+            Log::Info(value) => format!("{} | [INFO] | {} \n", time, value)
         };
 
         write_to_file(open_file, write_value, file);
