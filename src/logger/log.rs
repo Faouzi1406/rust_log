@@ -18,7 +18,7 @@ pub fn log(log: Log, file: PathBuf, error_trace:Option<&'static str>) {
             Log::Info(value) => format!("{} | [INFO] | {} \n", time, value)
         };
 
-        write_to_file(open_file, write_value, file);
+        write_to_file(open_file, write_value, file, error_trace);
     }
 }
 
@@ -26,6 +26,7 @@ fn write_to_file(
     open_file: Result<File, std::io::Error>,
     write_value: String,
     fallback_filename: &OsStr,
+    error_trace:Option<&'static str>
 ) {
     let open_file = open_file;
     let mut file_text = String::new();
@@ -35,5 +36,9 @@ fn write_to_file(
     file_text.push_str(&write_value);
     let err = format!("couldn't create file at: {:#?}", fallback_filename);
     let mut create_file = File::create(fallback_filename).expect(&err);
-    let _ = create_file.write_all(file_text.as_bytes());
+    let write = match error_trace {
+        Some(trace) => format!("{} \n {} \n", file_text, trace),
+        None => file_text
+    };
+    let _ = create_file.write_all(write.as_bytes()).expect("couldn't write to file");
 }
