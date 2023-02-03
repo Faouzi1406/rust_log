@@ -1,0 +1,1 @@
+/Users/faouzibouchkachekh/Documents/GitHub/rust_log/target/debug/liblogger.rlib: /Users/faouzibouchkachekh/Documents/GitHub/rust_log/src/lib.rs /Users/faouzibouchkachekh/Documents/GitHub/rust_log/src/logger/log.rs /Users/faouzibouchkachekh/Documents/GitHub/rust_log/src/logger/log_enum.rs /Users/faouzibouchkachekh/Documents/GitHub/rust_log/src/logger/mod.rs
