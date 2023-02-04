@@ -1,0 +1,9 @@
+name: log-tests
+
+run-name: tests for log
+on: [pull_request]
+jobs: 
+  test:
+    runs-on: ubuntu-latest
+    steps:  
+      - run: cargo test --verbose
