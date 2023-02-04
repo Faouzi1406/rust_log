@@ -1,9 +1,27 @@
-name: log-tests
 
-run-name: tests for log
-on: [pull_request]
-jobs: 
-  test:
+name: Test Log 
+
+on:
+  push:
+  pull_request:
+
+env: 
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build_and_test:
+    name: Test log 
     runs-on: ubuntu-latest
-    steps:  
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+          - beta
+          - nightly
+    steps:
+      - uses: actions/checkout@v3
+      - run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+      - run: cargo build --verbose
       - run: cargo test --verbose
+  
+
