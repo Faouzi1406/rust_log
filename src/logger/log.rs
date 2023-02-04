@@ -1,21 +1,25 @@
 use crate::logger::log_enum::Log;
-use std::{ffi::OsStr, fs::File, io::{Write, Read}, path::PathBuf, time::UNIX_EPOCH, fmt::format};
+use std::{ffi::OsStr, fs::File, io::{Write, Read}, path::PathBuf};
 use chrono::Utc;
 
 /// This takes in a PathBuf
 /// The paths will be looked at like different paths
 /// This allows you to write the same log to multiple files
+#[track_caller]
 pub fn log(log: Log, file: PathBuf, error_trace:Option<&'static str>) {
     for file in file.iter() {
         let open_file: Result<File, std::io::Error> = File::open(file);
         let time = Utc::now();
         let time = time.format("%Y-%m-%d %H:%M:%s").to_string();
+        let caller = std::panic::Location::caller();
+        let line  = caller.line();
+        let file_caller = caller.file();
 
         let write_value = match log {
-            Log::Error(err) => format!("{} |  [ERROR] | {} \n", time, err),
-            Log::Print(value) => format!("{} |  [PRINT] | {} \n", time, value),
-            Log::Warning(value) => format!("{} |  [WARNING] | {} \n", time, value),
-            Log::Info(value) => format!("{} | [INFO] | {} \n", time, value)
+            Log::Error(err) => format!("{} |  [ERROR] | [LINE] {} | [FILE] {} | {} \n", time, line, file_caller, err),   
+            Log::Print(value) => format!("{} |  [PRINT] | [LINE] {} | [FILE] {} | {} \n", time ,line, file_caller, value),
+            Log::Warning(value) => format!("{} |  [WARNING] | [LINE] {} | [FILE] {} | {} \n", time, line, file_caller ,value), 
+            Log::Info(value) => format!("{} | [INFO] | [LINE] {} | [FILE] {}  | {} \n", time, line, file_caller ,value)
         };
 
         write_to_file(open_file, write_value, file, error_trace);
