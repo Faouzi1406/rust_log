@@ -4,3 +4,10 @@ pub enum Log {
     Print(&'static str),
     Info(&'static str)
 }
+
+pub enum LogLevel {
+    All,
+    LevelWarning,
+    LevelError,
+    LevelPrint,
+}   
