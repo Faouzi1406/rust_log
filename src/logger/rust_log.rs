@@ -10,7 +10,7 @@ pub trait WriteLog {
     where
         Self: RustLog,
     {
-        let file = if trace.is_some() {
+        let file = if !trace.is_none() {
             let file = format!("{:?}\n{}", log, trace.unwrap());
             file
         } else {
