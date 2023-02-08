@@ -1,7 +1,6 @@
 use crate::logger::log_enum::Log;
 use chrono::Utc;
 use std::{
-    error::Error,
     ffi::OsStr,
     fs::File,
     io::{Read, Write},
@@ -75,7 +74,7 @@ pub fn log(log: Log, file: PathBuf, error_trace: Option<&'static str>, log_level
     }
 }
 
-fn write_to_file(
+pub fn write_to_file(
     open_file: Result<File, std::io::Error>,
     write_value: String,
     fallback_filename: &OsStr,
