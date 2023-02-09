@@ -2,11 +2,11 @@ use std::{fs::{File, read}, io::Write};
 use super::{log_enum::Log, log_struct::LogSet};
 
 pub trait RustLog {
-    fn log(&self, log: Log, file: &'static str, trace: Option<&'static str>);
+    fn log(&self, log: Log, file: &'static str, trace: Option<String>);
 }
 
 trait WriteLog {
-    fn write(&self, log: Log, log_file: &'static str, trace: Option<&'static str>)
+    fn write(&self, log: Log, log_file: &'static str, trace: Option<String>)
     where
         Self: RustLog,
     {
@@ -39,7 +39,7 @@ impl Default for LogSet {
 
 
 impl RustLog for LogSet {
-    fn log(&self, log: Log, file: &'static str, trace: Option<&'static str>) {
+    fn log(&self, log: Log, file: &'static str, trace: Option<String>) {
         match self.level {
             0 => return,
             1 => WriteLog::write(self, log, file, trace),
