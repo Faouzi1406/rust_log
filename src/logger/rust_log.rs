@@ -1,24 +1,29 @@
-use std::{fs::File, io::Write};
+use std::{fs::{File, read}, io::Write};
 use super::{log_enum::Log, log_struct::LogSet};
 
 pub trait RustLog {
     fn log(&self, log: Log, file: &'static str, trace: Option<&'static str>);
 }
 
-pub trait WriteLog {
+trait WriteLog {
     fn write(&self, log: Log, log_file: &'static str, trace: Option<&'static str>)
     where
         Self: RustLog,
     {
-        let file = if !trace.is_none() {
+        let file = if trace.is_some() {
+            println!("log: {:?}", log);
             let file = format!("{:?}\n{}", log, trace.unwrap());
             file
         } else {
-            let file = format!("{:?}\n{}", log, trace.unwrap());
+            let file = format!("{:?}\n", log);
             file
         };
-        let mut write = File::create(log_file).unwrap_or(File::open(log_file).unwrap());
-        write.write_all(file.as_bytes()).expect("Couldn't write logs to file");
+        let mut file_read = read(log_file).unwrap_or(vec![]);
+        let mut write = File::create(log_file).expect("Coulnd't create file");
+        for read in file.as_bytes() {
+            file_read.push(*read);
+        }
+        write.write_all(&file_read.clone()).expect("Couldn't write to file");
     }
 }
 
@@ -26,6 +31,7 @@ impl WriteLog for LogSet{}
 
 
 impl Default for LogSet {
+    /// Sets log level to default value of 0 
     fn default() -> Self {
         LogSet { level: 0 }
     }

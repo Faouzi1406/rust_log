@@ -19,7 +19,7 @@ pub enum LogLevel {
 }
 
 impl Debug for Log {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let time = Utc::now();
         let time = time.format("%Y-%m-%d %H:%M:%s").to_string();
         let caller = std::panic::Location::caller();
@@ -27,7 +27,7 @@ impl Debug for Log {
         let file_caller = caller.file();
         let mut format_value = String::new();
 
-        match &self {
+        let _ = match &self {
             Log::Error(err) => {
                 write!(
                     &mut format_value,
@@ -58,6 +58,8 @@ impl Debug for Log {
                     "{} | [INFO] | [LINE] {} | [FILE] {}  | {} \n", time, line, file_caller, value
                 )
             }
-        }
+        };
+        
+        f.write_str(&format_value)
     }
 }
